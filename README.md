@@ -1,5 +1,1 @@
-## API
-
-This program uses [Launch Library 2](https://ll.thespacedevs.com/2.3.0/launches/upcoming) to get upcoming launches
-
-
+This is a simple program written in Go that queries [Launch Library 2](https://ll.thespacedevs.com/2.3.0/launches/upcoming) for the next launch from Vandenberg SFB and displays a countdown timer. This was originally designed to fit nicely into my tmux status bar so that I could see when the next launch was from my terminal. 
