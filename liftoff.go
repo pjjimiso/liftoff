@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -13,10 +14,21 @@ import (
 	"github.com/pkg/errors"
 )
 
-const url = "https://ll.thespacedevs.com/2.3.0/launches/upcoming/?location__ids=11&limit=1"
 const cacheTTL = 5 * time.Minute
 
 func main() {
+	argLocation := flag.Int("location", 11, "Location ID to query (default: 11, Vandenberg SFB)")
+	argLimit := flag.Int("limit", 1, "number of upcoming launches to show")
+	argFull := flag.Bool("full", false, "show full launch details")
+
+	flag.Parse()
+
+	url := fmt.Sprintf(
+		"https://ll.thespacedevs.com/2.3.0/launches/upcoming/?location__ids=%d&limit=%d",
+		*argLocation,
+		*argLimit,
+	)
+
 	body, err := fetchWithCache(url)
 	if err != nil {
 		fmt.Printf("failed to fetch from api: %v", err)
@@ -35,23 +47,36 @@ func main() {
 		return
 	}
 
-	delta := time.Until(launch.Results[0].Net)
-	if delta < 0 {
-		fmt.Println("🚀 LIVE?")
-		return
-	}
+	for _, result := range launch.Results {
+		if *argFull {
+			fmt.Println("Name:", result.Name)
+			fmt.Println("Status:", result.Status.Name)
+			fmt.Println("Launch Time (local):", result.Net.In(time.Local).Format("2006-01-02 15:04:05 MST"))
+			fmt.Println("Service Provider:", result.LaunchServiceProvider.Name)
+			fmt.Println("Rocket:", result.Rocket.Configuration.FullName)
+			fmt.Printf("Mission: %s - %s\n", result.Mission.Name, result.Mission.Description)
+			fmt.Printf("Launch Pad: %s - %s\n", result.Pad.Name, result.Pad.Location.Name)
+			fmt.Println("Launch details last updated", result.LastUpdated)
+		}
 
-	var countdown string
-	days := int(delta.Hours()) / 24
-	hours := int(delta.Hours()) % 24
-	minutes := int(delta.Minutes()) % 60
-	if days > 0 {
-		countdown = fmt.Sprintf("%dd %dh %dm", days, hours, minutes)
-	} else {
-		countdown = fmt.Sprintf("%dh %dm", hours, minutes)
-	}
+		delta := time.Until(result.Net)
+		if delta < 0 {
+			fmt.Println("🚀 LIVE?")
+			continue
+		}
 
-	fmt.Printf("🚀 %s", countdown)
+		var countdown string
+		days := int(delta.Hours()) / 24
+		hours := int(delta.Hours()) % 24
+		minutes := int(delta.Minutes()) % 60
+		if days > 0 {
+			countdown = fmt.Sprintf("%dd %dh %dm", days, hours, minutes)
+		} else {
+			countdown = fmt.Sprintf("%dh %dm", hours, minutes)
+		}
+
+		fmt.Println("🚀", countdown)
+	}
 }
 
 func fetchWithCache(url string) ([]byte, error) {
@@ -72,7 +97,7 @@ func fetchWithCache(url string) ([]byte, error) {
 		log.Printf("cache has expired")
 	}
 
-	log.Printf("fetching new api data")
+	log.Printf("fetching new api data from url %s", url)
 	res, err := http.Get(url)
 	if err != nil {
 		return nil, errors.Wrap(err, "http request failed")
