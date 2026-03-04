@@ -8,25 +8,25 @@ This is a simple program written in Go that queries [Launch Library 2](https://l
 #### Usage:
 Basic usage shows a countdown to the next launch
 ```
-./liftoff
+% liftoff
 2026/03/03 15:00:17 reading from cache file: /home/pjjimiso/.cache/liftoff_cache.json
 🚀 22h 59m
 ```
 
 Redirect to stderr to suppress additional logging output
 ```
-./liftoff 2>/dev/null
+% liftoff 2>/dev/null
 🚀 22h 59m
 ```
 
 Show countdown for the next 3 launches
 ```
-./liftoff -limit 3 2>/dev/null
+% liftoff -limit 3 2>/dev/null
 ```
 
 Show full launch details
 ```
-./liftoff -full
+% liftoff -full
 2026/03/03 15:21:03 reading from cache file: /home/pjjimiso/.cache/liftoff_cache.json
 Name: Falcon 9 Block 5 | Starlink Group 17-18
 Status: Go for Launch
