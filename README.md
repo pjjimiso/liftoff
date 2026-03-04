@@ -1,9 +1,9 @@
-This is a simple program written in Go that queries [Launch Library 2](https://ll.thespacedevs.com/2.3.0/launches/upcoming) for the next launch from Vandenberg SFB and displays a countdown timer. This was originally designed to fit nicely into my tmux status bar so that I could track launch schedules from my terminal. I gradually added more features such as the ability to see additional launch details and show more than one upcoming launch. 
+This is a simple program written in Go that queries [Launch Library 2](https://ll.thespacedevs.com/2.3.0/launches/upcoming) for the next launch from Vandenberg SFB and displays a countdown timer. It was originally designed to fit nicely into my tmux status bar so that I could track launch schedules from my terminal. I gradually added more features such as the ability to see additional launch details and show more than one upcoming launch. 
 
 #### Arguments
-`-location`: Location ID to query (default: 11, Vandenberg SFB)
-`-limit`: number of upcoming launches to show
-`-full`: show full launch details
+`-location`: Location ID to query (default: 11, Vandenberg SFB)  
+`-limit`: number of upcoming launches to show  
+`-full`: show full launch details  
 
 #### Usage:
 Basic usage shows a countdown to the next launch
