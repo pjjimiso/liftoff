@@ -31,14 +31,14 @@ func main() {
 
 	body, err := fetchWithCache(url)
 	if err != nil {
-		fmt.Printf("failed to fetch from api: %v", err)
+		log.Printf("failed to fetch from api: %v", err)
 		os.Exit(1)
 	}
 
 	launch := Launch{}
 	err = json.Unmarshal(body, &launch)
 	if err != nil {
-		fmt.Printf("failed to parse json: %v", err)
+		log.Printf("failed to parse json: %v", err)
 		os.Exit(1)
 	}
 
