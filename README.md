@@ -38,3 +38,5 @@ Launch Pad: Space Launch Complex 4E - Vandenberg SFB, CA, USA
 Launch details last updated 2026-02-25 18:03:29 +0000 UTC
 🚀 22h 38m
 ```
+
+TBD
